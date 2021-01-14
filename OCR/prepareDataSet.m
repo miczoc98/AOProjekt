@@ -1,4 +1,4 @@
-function data_set = prepareDataSet(font_name)
+function data_set = prepareDataSet(font_name, side_size)
     
     dir = "DataSets/";
     font_ucase_name  = strcat(dir, "ArialUpperCase.png");
@@ -29,28 +29,25 @@ function data_set = prepareDataSet(font_name)
     l_lcase = changeLabel(l_lcase, 11, 10);
 
     l_others = changeLabel(l_others, 12, 11);
-    l_others = changeLabel(l_others, 15, 14);
-    l_others = changeLabel(l_others, 15, 14);
-    l_others = changeLabel(l_others, 21, 20);
+    l_others = changeLabel(l_others, 20, 19);
+    l_others = changeLabel(l_others, 25, 24);
     l_others = changeLabel(l_others, 26, 25);
-    l_others = changeLabel(l_others, 27, 26);
-    l_others = changeLabel(l_others, 28, 27);
-    l_others = changeLabel(l_others, 32, 31);
+    l_others = changeLabel(l_others, 30, 29);
     
     ucase_char  = regionprops(logical(l_ucase), 'image');
     lcase_char  = regionprops(l_lcase, 'image');
     others_char = regionprops(l_others, 'image');
     
-    im_chars = zeros(25, 25, length(ucase_char) + length(lcase_char) + length(others_char));
+    im_chars = zeros(side_size, side_size, length(ucase_char) + length(lcase_char) + length(others_char));
     
     for i=1:length(ucase_char)
-        im_chars(:,:,i) = imresize(padarray(ucase_char(i).Image, [7, 7]), [25, 25]);
+        im_chars(:,:,i) = resizeToSquare(ucase_char(i).Image, side_size);
     end
     for i=1:length(lcase_char)
-        im_chars(:,:,length(ucase_char) + i) = imresize(padarray(lcase_char(i).Image, [7, 7]), [25, 25]);
+        im_chars(:,:,i + length(ucase_char)) = resizeToSquare(lcase_char(i).Image, side_size);
     end
     for i=1:length(others_char)
-        im_chars(:,:,length(ucase_char) + length(lcase_char) + i) = imresize(padarray(others_char(i).Image, [7, 7]), [25, 25]);
+        im_chars(:,:,i + length(ucase_char) + length(lcase_char)) = resizeToSquare(others_char(i).Image, side_size);         
     end
 
     data_set = im_chars;

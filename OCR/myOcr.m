@@ -1,6 +1,5 @@
-function result_text = myOcr(data_set, input_characters)
-    
-    result_text = "";
+function result_character = myOcr(data_set, input_character)
+
     characters_mapping = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", ...
                           "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", ...
                           "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", ...
@@ -10,18 +9,13 @@ function result_text = myOcr(data_set, input_characters)
                           "&", "(", ")", "-", "+", "=", "[", "]", "{", "}", ":", ...
                           ";", '"', "'", ",", ".", "?"];
     
-    result = zeros(size(input_characters, 3), size(data_set, 3));
-                  
-    for i=1:size(input_characters, 3)
-        for j=1:size(data_set, 3)
-            result(i,j) = corr2(input_characters(:,:,i), data_set(:,:,j));
-        end
+    result = zeros(1, size(data_set, 3));
+    for i=1:size(data_set, 3)
+        result(1,i) = corr2(input_character(:,:), data_set(:,:,i));
     end
-    
-    for i=1:size(input_characters, 3)
-        [val, idx] = max(result(i,:));
-        result_text = strcat(result_text, characters_mapping(idx));
-    end
+
+    [val, idx] = max(result(1,:));
+    result_character = characters_mapping(idx);  
 end
 
 

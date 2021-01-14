@@ -1,30 +1,34 @@
 clear; clc;
 
-arial_data_set     = prepareDataSet("Arial");
-tnr_data_set       = prepareDataSet("TimesNewRoman");
-helvetica_data_set = prepareDataSet("Helvetica");
+arial_data_set     = prepareDataSet("Arial", 50);
+tnr_data_set       = prepareDataSet("TimesNewRoman", 50);
+helvetica_data_set = prepareDataSet("Helvetica", 50);
 
-% for i=1:size(tnr_data_set, 3)
-%     subplot(10, 9, i);
-%     imshow(tnr_data_set(:,:,i));
+data_set = arial_data_set;
+
+% for i=1:size(data_set, 3)
+%     subplot(9, 9, i);
+%     imshow(data_set(:,:,i));
 % end
 
 % Testing OCR
 test_data = double(imread("ArialTest.png"))/255;
-data_set = arial_data_set;
-% test_data = double(imread("TimesNewRomanTest.png"))/255;
-% data_set = tnr_data_set;
 test_data = ~imbinarize(rgb2gray(test_data));
 
 test_data = bwlabel(test_data);
 test_data = regionprops(logical(test_data), "image");
 
-input = zeros(25, 25, length(test_data));
+input_char = zeros(50, 50, length(test_data));
 
 for i=1:length(test_data)
-    input(:,:,i) = imresize(padarray(test_data(i).Image, [7, 7]), [25, 25]);
+    input_char(:,:,i) = resizeToSquare(test_data(i).Image, 50);
 %     subplot(5, 5, i);
-%     imshow(input(:,:,i));
+%     imshow(input_char(:,:,i));
 end
 
-result = myOcr(data_set, input)
+result_text = "";
+for i=1:size(input_char, 3)
+    result_text = strcat(result_text, myOcr(data_set, input_char(:,:,i)));
+end
+
+    
