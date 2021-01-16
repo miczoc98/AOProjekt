@@ -31,37 +31,40 @@ for i=1:heightImage
     end
 end
 
-tab=zeros(100,4);
-% x=bwlabel(bim);
-% max(x(:))
-indexTab=0;
+tab=zeros(1,1,4);
+
+indexTab=1;
 dotFlag=false;
+indexSpace=1;
+wordIndex=1;
 
 for i=1:index-1
     temp=bim(start_y(i):end_y(i),:);
-    
     indexSpace=1;
+    
     temp_words=imdilate(temp,ones(5));
-%     figure;
-%     imshow(temp_words);
+
     word=regionprops(temp_words,'BoundingBox');
     
     l=bwlabel(temp);
     boxes=regionprops(temp,'BoundingBox');
     ns=size(boxes,1);
     testSpace=word(indexSpace).BoundingBox(1)+word(indexSpace).BoundingBox(3);
-    
+
     for j=1:ns
         currentBox=boxes(j).BoundingBox;
         if currentBox(1)>testSpace
             indexSpace=indexSpace+1;
             testSpace=word(indexSpace).BoundingBox(1)+word(indexSpace).BoundingBox(3);
+            wordIndex=wordIndex+1;
+            indexTab=1;
         end
-%         imshow(~imcrop(l==j,currentBox));
           if ~dotFlag
-            rectangle('position',[currentBox(1),start_y(i),currentBox(3),end_y(i)-start_y(i)]);
+            newBox=cut2OwnSize(bim,[currentBox(1),start_y(i),currentBox(3),end_y(i)-start_y(i)]);
+            rectangle('position',[currentBox(1),start_y(i)-1+newBox(2),currentBox(3),newBox(4)]);
+            
+            tab(wordIndex,indexTab,:)=[currentBox(1),start_y(i)-1+newBox(2),currentBox(3),newBox(4)];
             indexTab=indexTab+1;
-            tab(indexTab,:)=[currentBox(1),start_y(i),currentBox(3),end_y(i)-start_y(i)];
             
           end
           dotFlag=false;
@@ -72,7 +75,9 @@ for i=1:index-1
            end
         end          
     end
+    wordIndex=wordIndex+1;
+    indexTab=1;
+    tab(wordIndex,indexTab,:)=newline;
+    wordIndex=wordIndex+1;
 end
-% reshape(tab,indexTab,4);
-% figure;
-% imshow(~imcrop(bim,tab(3,:)));
+
