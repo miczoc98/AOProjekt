@@ -30,13 +30,10 @@ for i=1:heightImage
         
     end
 end
-
-tab=zeros(1,1,4);
-
+tab = cell(max(max(bwlabel(bim))));
 indexTab=1;
 dotFlag=false;
 indexSpace=1;
-wordIndex=1;
 
 for i=1:index-1
     temp=bim(start_y(i):end_y(i),:);
@@ -56,14 +53,14 @@ for i=1:index-1
         if currentBox(1)>testSpace
             indexSpace=indexSpace+1;
             testSpace=word(indexSpace).BoundingBox(1)+word(indexSpace).BoundingBox(3);
-            wordIndex=wordIndex+1;
-            indexTab=1;
+            tab{indexTab}=" ";
+            indexTab=indexTab+1;
         end
           if ~dotFlag
             newBox=cut2OwnSize(bim,[currentBox(1),start_y(i),currentBox(3),end_y(i)-start_y(i)]);
             rectangle('position',[currentBox(1),start_y(i)-1+newBox(2),currentBox(3),newBox(4)]);
             
-            tab(wordIndex,indexTab,:)=[currentBox(1),start_y(i)-1+newBox(2),currentBox(3),newBox(4)];
+            tab{indexTab}=[currentBox(1),start_y(i)-1+newBox(2),currentBox(3),newBox(4)];
             indexTab=indexTab+1;
             
           end
@@ -75,9 +72,6 @@ for i=1:index-1
            end
         end          
     end
-    wordIndex=wordIndex+1;
-    indexTab=1;
-    tab(wordIndex,indexTab,:)=newline;
-    wordIndex=wordIndex+1;
+    indexTab=indexTab+1;
+    tab{indexTab}=newline;
 end
-
