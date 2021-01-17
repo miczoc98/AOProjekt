@@ -49,14 +49,14 @@ classdef Recognizer
             l_lcase  = bwlabel(bim_lcase);
             l_others = bwlabel(bim_others);
 
-            l_lcase = changeLabel(l_lcase, 10, 9);
-            l_lcase = changeLabel(l_lcase, 11, 10);
+            l_lcase = this.changeLabel(l_lcase, 10, 9);
+            l_lcase = this.changeLabel(l_lcase, 11, 10);
 
-            l_others = changeLabel(l_others, 12, 11);
-            l_others = changeLabel(l_others, 20, 19);
-            l_others = changeLabel(l_others, 25, 24);
-            l_others = changeLabel(l_others, 26, 25);
-            l_others = changeLabel(l_others, 30, 29);
+            l_others = this.changeLabel(l_others, 12, 11);
+            l_others = this.changeLabel(l_others, 20, 19);
+            l_others = this.changeLabel(l_others, 25, 24);
+            l_others = this.changeLabel(l_others, 26, 25);
+            l_others = this.changeLabel(l_others, 30, 29);
 
             ucase_char  = regionprops(logical(l_ucase), 'image');
             lcase_char  = regionprops(l_lcase, 'image');
@@ -65,13 +65,13 @@ classdef Recognizer
             im_chars = zeros(this.sideSize, this.sideSize, length(ucase_char) + length(lcase_char) + length(others_char));
 
             for i=1:length(ucase_char)
-                im_chars(:,:,i) = resizeToSquare(ucase_char(i).Image, this.sideSize);
+                im_chars(:,:,i) = this.resizeToSquare(ucase_char(i).Image, this.sideSize);
             end
             for i=1:length(lcase_char)
-                im_chars(:,:,i + length(ucase_char)) = resizeToSquare(lcase_char(i).Image, this.sideSize);
+                im_chars(:,:,i + length(ucase_char)) = this.resizeToSquare(lcase_char(i).Image, this.sideSize);
             end
             for i=1:length(others_char)
-                im_chars(:,:,i + length(ucase_char) + length(lcase_char)) = resizeToSquare(others_char(i).Image, this.sideSize);         
+                im_chars(:,:,i + length(ucase_char) + length(lcase_char)) = this.resizeToSquare(others_char(i).Image, this.sideSize);         
             end
 
             this.dataSet = im_chars;
@@ -106,7 +106,7 @@ classdef Recognizer
             im_square = imresize(im_square, [final_size, final_size]);
         end
         
-        function m = changeLabel(m, v1, v2)
+        function m = changeLabel(~, m, v1, v2)
             m(m==v1) = v2; 
             for i=v1+1:max(m, [], 'all')
                 m(m==i) = i-1;
