@@ -1,6 +1,6 @@
 classdef Segmentizer
     methods
-        function tab = segmentize(~, image)
+        function tab = segmentize(this, image)
             bim = ~imbinarize(rgb2gray(image));
 
             heightImage = size(bim,1);
@@ -51,7 +51,7 @@ classdef Segmentizer
                         indexTab=indexTab+1;
                     end
                     if ~dotFlag
-                        newBox=cut2OwnSize(bim,[currentBox(1),start_y(i),currentBox(3),end_y(i)-start_y(i)]);
+                        newBox=this.cut2OwnSize(bim,[currentBox(1),start_y(i),currentBox(3),end_y(i)-start_y(i)]);
                         tab{indexTab} = imcrop(bim, [currentBox(1),start_y(i)-1+newBox(2), currentBox(3) -  1,newBox(4) - 1]);
                         indexTab=indexTab+1;
 
