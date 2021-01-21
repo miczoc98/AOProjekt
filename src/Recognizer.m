@@ -3,11 +3,25 @@ classdef Recognizer
     %   Detailed explanation goes here
     
     properties
-        dataSet;
         sideSize = 50;
+        dataSet;
+        
+        arialDataSet; 
+        helveticaDataSet; 
+        tnrDataSet; 
+        purisaDataSet; 
+        avgDataSet;
     end
     
     methods
+        function obj = Recognizer()
+            obj.arialDataSet = obj.createDataSet("Arial");
+            obj.helveticaDataSet = obj.createDataSet("Helvetica");
+            obj.tnrDataSet = obj.createDataSet("TimesNewRoman");
+            obj.purisaDataSet = obj.createDataSet("Purisa");
+            obj.avgDataSet = obj.createAvgDataSet();
+        end
+        
         function result = recognizeCharacter(this, input)
             characters_mapping = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", ...
                                   "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", ...
@@ -30,7 +44,7 @@ classdef Recognizer
             result = characters_mapping(idx);  
         end
         
-        function this = createDataSet(this, font_name)
+        function dataSet = createDataSet(this, font_name)
             dir = "DataSets/";
 
             font_ucase_name  = strcat(dir, font_name, "UpperCase.png");
@@ -74,7 +88,7 @@ classdef Recognizer
                 im_chars(:,:,i + length(ucase_char) + length(lcase_char)) = this.resizeToSquare(others_char(i).Image, this.sideSize);         
             end
 
-            this.dataSet = im_chars;
+            dataSet = im_chars;
         end
         
         function im_square = resizeToSquare(~, im, final_size)
@@ -110,6 +124,27 @@ classdef Recognizer
             m(m==v1) = v2; 
             for i=v1+1:max(m, [], 'all')
                 m(m==i) = i-1;
+            end
+        end
+        
+        function avgDataSet = createAvgDataSet(this)
+            ds1 = this.arialDataSet;
+            ds2 = this.helveticaDataSet;
+            ds3 = this.tnrDataSet;
+            avgDataSet = zeros(size(ds1, 1), size(ds1, 2), size(ds1, 3));
+            for i=1:size(ds1, 3)
+                for j=1:size(ds1, 2)
+                    for k=1:size(ds1, 1)
+                        for n_ds=1:3
+                            avgDataSet(k, j, i) = (ds1(k, j, i) + ds2(k, j, i) + ds3(k, j, i)) / 3;
+                            if avgDataSet(k, j, i) >= 0.5
+                                avgDataSet(k, j, i) = 1;
+                            else
+                                avgDataSet(k, j, i) = 0;
+                            end
+                        end
+                    end
+                end
             end
         end
     end

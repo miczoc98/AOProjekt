@@ -32,7 +32,7 @@ classdef Segmentizer
                 temp=bim(start_y(i):end_y(i),:);
                 indexSpace=1;
 
-                temp_words=imdilate(temp,ones(5));
+                temp_words=imdilate(temp,ones(15));
 
                 word=regionprops(temp_words,'BoundingBox');
 
@@ -57,13 +57,17 @@ classdef Segmentizer
                         dotFlag=false;
                     if(j<ns-1)
                        nextBoxLeft=boxes(j+1).BoundingBox(1);
-                       if(nextBoxLeft>currentBox(1)&&nextBoxLeft<(currentBox(1)+currentBox(3)))
+                       if(nextBoxLeft>=currentBox(1)&&nextBoxLeft<=(currentBox(1)+currentBox(3)))
                            dotFlag=true;
                        end
                     end          
                 end
                 tab{indexTab}=newline;
                 indexTab=indexTab+1;
+            end
+            
+            if index == 1
+                tab{1} = ' ';
             end
         end
         
