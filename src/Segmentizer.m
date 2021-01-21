@@ -1,8 +1,6 @@
 classdef Segmentizer
     methods
-        function tab = segmentize(this, image)
-            bim = ~imbinarize(rgb2gray(image));
-
+        function tab = segmentize(this, bim)
             heightImage = size(bim,1);
 
             flag = true;

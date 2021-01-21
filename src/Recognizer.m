@@ -26,7 +26,7 @@ classdef Recognizer
                 result(1,i) = corr2(input(:,:), this.dataSet(:,:,i));
             end
 
-            [val, idx] = max(result(1,:));
+            [~, idx] = max(result(1,:));
             result = characters_mapping(idx);  
         end
         
