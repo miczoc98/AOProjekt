@@ -31,8 +31,8 @@ classdef Segmentizer
             for i=1:index-1
                 temp=bim(start_y(i):end_y(i),:);
                 indexSpace=1;
-
-                temp_words=imdilate(temp,ones(15));
+                dilateValue = floor((end_y(i)-start_y(i))*.35);
+                temp_words=imdilate(temp,ones(dilateValue));
 
                 word=regionprops(temp_words,'BoundingBox');
 
