@@ -16,10 +16,6 @@ classdef Binarizer
                 case 'dynamic'
                     binarized = dynamicBinarize(this, image);
             end
-            
-            if this.isColorInversionOn
-                binarized = ~binarized;
-            end
         end
         
         function binarized = manualBinarize(this, image)
@@ -37,16 +33,27 @@ classdef Binarizer
                 b = imbinarize(image(:,:,3), this.threshold);
                 binarized = binarized|b;
             end
+            
+            if this.isColorInversionOn
+                binarized = ~binarized;
+            end
         end
         
-        function binarized = autoBinarize(~, image)
+        function binarized = autoBinarize(this, image)
             image = rgb2gray(image);
             binarized = imbinarize(image);
+            if this.isColorInversionOn
+                binarized = ~binarized;
+            end
         end
         
-        function binarized = dynamicBinarize(~, image)
+        function binarized = dynamicBinarize(this, image)
             image = rgb2gray(image);
-            binarized = imbinarize(image, 'adaptive');
+            if (this.isColorInversionOn)
+                image = ones(size(image)) - image;
+            end
+            
+            binarized = imbinarize(image, 'adaptive', 'Sensitivity', this.threshold);
         end
     end
 end
