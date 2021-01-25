@@ -1,5 +1,5 @@
 \subsection{Segmentacja w projekcie}
-    Isotnym elementem naszej aplikacji jest segmentacja. Musieliśmy napisać skrypt w taki sposób, by uzyskać odczytany tekst z obrazka z podziałem na linie, słowa i litery. Docelowo skrypt zwraca tablice, która zawiera pojedyńcze litery, spacje lub znak nowej linii.
-    Podział na linie zrealizowaliśmy sumując wartości danego wiersza macierzy obrazu po binaryzacji. Jeśli wartość wiersza była większa od zera to oznaczało, że jest to część linii.
-    Następnie każdą linie tekstu analizowaliśmy osobno. Podział na słowa, zrealizowaliśmy przy użyciu dylatacjii tak by znaki się połączyły i wyznaczyły słowo. Wartość dylatacjii określiliśmy doświadczalnie dla testowanych przykładów.
-    W trakcie realizacjii segmentacji pojawiły się problemy, np. kropka nad i (jak ją zachować, rozwiązane przez BoundingBox), czy też problem kerningu.
+    Isotnym elementem aplikacji jest segmentacja. Napisany skrypt uzyskuje odczytany tekst z obrazka z podziałem na linie, słowa i litery. Docelowo skrypt zwraca tablice, która zawiera pojedyncze litery, spacje lub znak nowej linii.
+    Podział na linie zrealizowany jest przez sumowanie wartości danego wiersza macierzy obrazu po binaryzacji. Jeśli wartość wiersza jest większa od zera to znaczy, że jest to część linii.
+    Następnie każda linia tekstu podlega analizie osobno. Podział na słowa, realizuje użycie dylatacjii tak by znaki się połączyły i wyznaczyły słowo. Wartość dylatacjii została określona doświadczalnie dla testowanych przykładów.
+    W trakcie realizacjii segmentacji pojawiły się problemy, np. kropka nad i (jak ją zachować), czy też problem kerningu.
